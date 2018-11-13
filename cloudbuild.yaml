@@ -1,0 +1,9 @@
+- name: 'gcr.io/cloud-builders/gcloud'
+  args:
+  - functions
+  - deploy
+  - autodeploy
+  - --trigger-http
+  - --entry-point helloHttp
+  - --runtime nodejs8
+  dir: 'autodeploy'
