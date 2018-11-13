@@ -1,14 +1,14 @@
-# Commit to repo -> deploy workflow with Google Cloud Functions
+# Automated deployments to Google Cloud Functions: commit, push, deploy
 
 ## Overview
 
-This example shows you how to set up a commit to git repo -> deploy workflow.
-At a high level, the goal is to enable you to:
+This example shows integrating Cloud Build with Cloud Functions to enable an
+automated deployment workflow. At a high level, the goal is to enable you to:
 * modify code locally
 * commit and push that change to a remote repository
 * trigger a deployment to Google Cloud Functions using the updated code
 
-We use the following products:
+The example uses the following products:
 * Cloud Functions
 * Cloud Build
 * Cloud Source Repositories
@@ -19,7 +19,7 @@ We use the following products:
 ### Pre-requisites
 * `git`
 * `curl`
-* A Google Cloud Platform account
+* A Google Cloud Platform account with billing enabled
 * A GitHub account
 
 ### Create your project and function directories
@@ -31,6 +31,11 @@ $ cd functions
 ```
 
 `functions/autodeploy` will contain the code corresponding to our Cloud Function.
+`autodeploy` will contain the function that will be deployed automatically.
+
+Note: you could extend this repository by adding more functions, each in its own
+sub-directory. Each function would have its own deployment rules specified in
+`cloudbuild.yaml`.
 
 ### Initialize a local git repo
 
@@ -88,7 +93,8 @@ A few notes:
   spaces, e.g., `--runtime nodejs8`
 * we use `dir` to instruct Cloud Build to execute the `gcloud` command from
   within the `autodeploy` directory
-
+* if you want to add more functions, add corresponding build steps in your
+  `cloudbuild.yaml`
 
 ### Commit changes to your local repository
 
@@ -132,8 +138,9 @@ Cloud Build doesn't, by default, have access to the Cloud Functions API within
 your project. Before attempting a deployment, follow the
 [Cloud Functions Deploying artifacts](https://cloud.google.com/cloud-build/docs/configuring-builds/build-test-deploy-artifacts#deploying_artifacts) instructions (steps 2 and 3, in particular).
 
-Note that, when you get to the IAM instructions, there will typically only be
-one project that matches with `[YOUR-PROJECT-NUMBER]@cloudbuild.gserviceaccount.com`.
+Note that you will need your project number (not your project name/id). When looking
+at the IAM page, there will typically only be one entry that matches
+`[YOUR-PROJECT-NUMBER]@cloudbuild.gserviceaccount.com`.
 
 ### Trigger a build
 
