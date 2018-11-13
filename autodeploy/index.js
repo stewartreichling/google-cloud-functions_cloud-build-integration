@@ -7,5 +7,5 @@
  *                     More info: https://expressjs.com/en/api.html#res
  */
 exports.helloHttp = (req, res) => {
-  res.send(`Hello, ${req.body.name || 'World'}!`);
+  res.send(`Hey, ${req.body.name || 'World'}!`);
 };
