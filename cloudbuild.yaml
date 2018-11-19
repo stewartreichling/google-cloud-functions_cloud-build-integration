@@ -1,4 +1,4 @@
 steps:
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['functions', '${_ACTION}', '${_PREFIX}-autodeploy', '--trigger-http', '--entry-point', 'helloHttp', '--runtime', 'nodejs8']
+  args: ['functions', 'deploy', 'autodeploy', '--trigger-http', '--entry-point', 'helloHttp', '--runtime', 'nodejs8']
   dir: 'autodeploy'

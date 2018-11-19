@@ -1,3 +1,4 @@
 #!/bin/bash
 
-gcloud builds submit --config cloudbuild.yaml --substitutions=_PREFIX="myprefix",_ACTION="deploy" .
+#gcloud builds submit --config cloudbuild.yaml --substitutions=_PREFIX="myprefix",_ACTION="deploy" .
+gcloud builds submit --config cloudbuild.yaml .
