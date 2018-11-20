@@ -1,3 +1,0 @@
-#!/bin/bash
-
-gcloud builds submit --config cloudbuildprefix.yaml --substitutions=_PREFIX="myprefix" .
