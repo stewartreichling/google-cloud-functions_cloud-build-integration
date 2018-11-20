@@ -1,0 +1,7 @@
+steps:
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions', 'delete', '${_PREFIX}-func1']
+  dir: 'autodeploy'
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions', 'delete', '${_PREFIX}-func2']
+  dir: 'autodeploy'

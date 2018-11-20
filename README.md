@@ -6,7 +6,7 @@ This example shows integrating Cloud Build with Cloud Functions to enable an
 automated deployment workflow. At a high level, the goal is to enable you to:
 * modify code locally
 * commit and push that change to a remote repository
-* trigger a deployment to Google Cloud Functions using the updated code
+* trigger a deployment to Google Cloud Functions using the updated code (either automated or manual for multiple functions)
 
 The example uses the following products:
 * Cloud Functions
@@ -36,6 +36,13 @@ $ cd functions
 Note: you could extend this repository by adding more functions, each in its own
 sub-directory. Each function would have its own deployment rules specified in
 `cloudbuild.yaml`.
+
+For reference, view `cloudbuildprefix.yaml`.
+It defines 2 functions with different names to be deployed
+(though the `dir` is the same for both, that is easy enough to adjust accordingly).
+This example also includes adding a PREFIX to the name of the function, which is useful for deleting testing functions.
+Using a PREFIX it makes easier to delete testing functions using `cloudbuilddelete.yaml` configuration file.
+
 
 ### Initialize a local git repo
 
@@ -103,6 +110,10 @@ $ git add *
 $ git commit -m "My first commit"
 ```
 
+Note:
+If you are only wanting to manually trigger Cloud Build to build your App,
+you can jump to: `Manually trigger a Cloud Build`
+
 ### Create a remote repository, sync and push
 
 Create a new repository on GitHub by following [the prompts](https://github.com/new).
@@ -120,6 +131,51 @@ Set up a repository in Cloud Source Repositories and mirror it to your GitHub
 repo. [Follow the Setting Up a Repository](https://cloud.google.com/tools/cloud-repositories/docs/cloud-repositories-setup)
 instructions and select "Automatically mirror from GitHub or Bitbucket" when
 you're in the Google Cloud Console.
+
+### Manually trigger a Cloud Build
+
+To manually trigger an instance of building and deploying your functions,
+you can easily do so by executing the following commands:
+
+```console
+gcloud builds submit --config cloudbuild.yaml .
+```
+
+To use the example with a PREFIX, you'd need to execute the following command:
+
+```console
+gcloud builds submit --config cloudbuildprefix.yaml --substitutions=_PREFIX="myprefix" .
+```
+
+Note:
+Notice the flag: `--substitutions=`
+More on substitutions: [Using user-defined substitutions](https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values#using_user-defined_substitutions)
+This is where you specify the PREFIX for the name of the function you are deploying.
+By using the same PREFIX, you can easily delete whole groups of testing functions by executing this command:
+
+```console
+gcloud builds submit --config cloudbuilddelete.yaml --substitutions=_PREFIX="myprefix" --no-source
+```
+
+Note:
+Notice the `--no-source` glag.
+This flag is used because we aren't compiling/building any app,
+only executing a command call to delete functions specified in `cloudbuilddelete.yaml`.
+
+
+Your functions are now online!
+
+To simplify the process, you can also use:
+```console
+make deploy
+make delete
+```
+
+or by using bash:
+```console
+bash bin/deploy
+bash bin/delete
+```
 
 ### Create a Cloud Build trigger
 
